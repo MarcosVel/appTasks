@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 
 export default function Login() {
+  const [ type, setType ] = useState('login');
+
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
 
@@ -27,14 +29,20 @@ export default function Login() {
         />
 
         <TouchableOpacity
-          style={ styles.btnLogin }
+          style={ [ styles.btnLogin, { backgroundColor: type === 'login' ? '#3ea6f2' : '#141414' } ] }
           onPress={ handleLogin }
         >
-          <Text style={ styles.loginText }>Acessar</Text>
+          <Text style={ styles.loginText }>
+            {
+              type === 'login' ? 'Acessar' : 'Cadastrar'
+            }
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Text>Criar uma conta</Text>
+        <TouchableOpacity onPress={ () => setType(type => type === 'login' ? 'cadastrar' : 'login') }>
+          <Text>
+            { type === 'login' ? 'Criar uma conta' : 'Fazer login' }
+          </Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
@@ -60,7 +68,6 @@ const styles = StyleSheet.create({
   btnLogin: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#141414',
     height: 45,
     width: '90%',
     borderRadius: 8,
