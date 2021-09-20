@@ -29,7 +29,7 @@ export default function Login() {
         />
 
         <TouchableOpacity
-          style={ styles.btnLogin }
+          style={ [ styles.btnLogin, { backgroundColor: type === 'login' ? '#3ea6f2' : '#141414' } ] }
           onPress={ handleLogin }
         >
           <Text style={ styles.loginText }>
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   btnLogin: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#141414',
     height: 45,
     width: '90%',
     borderRadius: 8,
