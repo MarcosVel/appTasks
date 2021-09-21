@@ -10,7 +10,7 @@ export default function App() {
       <StatusBar backgroundColor="transparent" barStyle='dark-content' />
       {
         !user ?
-          <Login />
+          <Login changeStatus={ (user) => setUser(user) } />
           :
           <Text>Dentro da tela Tarefas</Text>
       }
