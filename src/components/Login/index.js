@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import firebase from '../../services/firebaseConnection';
 
-export default function Login() {
+export default function Login({ changeStatus }) {
   const [ type, setType ] = useState('login');
 
   const [ email, setEmail ] = useState('');
@@ -13,7 +13,8 @@ export default function Login() {
     if (type === 'login') {
       const user = firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
-          console.log(user.user)
+          // console.log(user.user)
+          changeStatus(user?.user.uid)
         })
         .catch((error) => {
           console.error(error)
@@ -24,7 +25,8 @@ export default function Login() {
       // Cadastro de usuário
       const user = firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
-          console.log(user.user)
+          // console.log(user.user)
+          changeStatus(user.user.uid)
         })
         .catch((error) => {
           console.log(error)
