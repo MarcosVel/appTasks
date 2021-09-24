@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, StatusBar, SafeAreaView, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import Login from './src/components/Login';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
 import TaskList from './src/components/TaskList';
 
@@ -107,6 +107,12 @@ export default function App() {
       })
   }
 
+  function cancelEdit() {
+    setKey('');
+    setNewTask('');
+    Keyboard.dismiss();
+  }
+
   return (
     <SafeAreaView style={ styles.container }>
       <StatusBar backgroundColor="transparent" barStyle='dark-content' />
@@ -132,6 +138,22 @@ export default function App() {
                 <FontAwesome name="plus" size={ 20 } color="white" />
               </TouchableOpacity>
             </View>
+
+            {
+              key.length > 0 && (
+                <View style={ styles.viewWarning }>
+                  <TouchableOpacity style={ styles.btnWarningCancel } onPress={ cancelEdit }>
+                    <Ionicons name="ios-close-circle-outline" size={ 24 } color="#ff0000" style={ { marginRight: 3 } } />
+                    <Text style={ { color: '#ff0000' } }>Cancelar</Text>
+                  </TouchableOpacity>
+
+                  <View style={ { flexDirection: 'row', alignItems: 'center', } }>
+                    <Ionicons name="ios-alert-circle-outline" size={ 24 } color="#9c9c9c" style={ { marginRight: 3 } } />
+                    <Text style={ { color: '#9c9c9c' } }>Você está editando uma tarefa</Text>
+                  </View>
+                </View>
+              )
+            }
 
             <FlatList
               data={ tasks }
@@ -185,5 +207,14 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 30,
     color: '#fff',
-  }
+  },
+  viewWarning: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10
+  },
+  btnWarningCancel: {
+    flexDirection: 'row', alignItems: 'center'
+  },
 });
