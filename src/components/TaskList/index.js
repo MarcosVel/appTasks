@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center',
+    marginTop: 1,
+    marginHorizontal: 2,
     marginBottom: 10,
     padding: 10,
     borderRadius: 8,
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     backgroundColor: '#ff0000',
-    marginTop: -10, // compensar o marginBottom do container
+    marginTop: -9, // compensar o marginBottom do container
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
