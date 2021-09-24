@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, StatusBar, SafeAreaView, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import Login from './src/components/Login';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,6 +12,9 @@ export default function App() {
   const [ tasks, setTasks ] = useState([]);
 
   const [ newTask, setNewTask ] = useState('');
+  const [ key, setKey ] = useState('');
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     function getUser() {
@@ -50,12 +53,36 @@ export default function App() {
   }
 
   function handleEdit(data) {
-    console.log('Item clicado:', data)
+    // console.log('Item clicado:', data)
+    setKey(data.key);
+    // coloca no input o dado do card
+    setNewTask(data.nome);
+    inputRef.current.focus(); // abrir teclado
+
   }
 
   function handleAdd() {
     // Se vazio fazer nada
     if (newTask === '') {
+      return;
+    }
+
+    // usuário quer editar uma tarefa
+    if (key !== '') {
+      firebase.database().ref('tarefas').child(user).child(key).update({
+        nome: newTask // novo valor passado no input de edição
+      })
+        .then(() => {
+          const taskIndex = tasks.findIndex(item => item.key === key) // procura o index da task selecionada
+          let taskClone = tasks; // clona toda a lista
+          taskClone[ taskIndex ].nome = newTask // passa para a task selecionada o valor que está no input
+
+          setTasks([ ...taskClone ]) // faz com que a lista seja atualizada com o novo valor da task
+        })
+
+      Keyboard.dismiss();
+      setNewTask('');
+      setKey('');
       return;
     }
 
@@ -98,6 +125,7 @@ export default function App() {
                 placeholder="Tarefa..."
                 value={ newTask }
                 onChangeText={ (text) => setNewTask(text) }
+                ref={ inputRef }
               />
 
               <TouchableOpacity style={ styles.buttonAdd } onPress={ handleAdd }>
