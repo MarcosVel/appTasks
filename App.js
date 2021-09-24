@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, StatusBar, SafeAreaView, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import Login from './src/components/Login';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,6 +12,33 @@ export default function App() {
   const [ tasks, setTasks ] = useState([]);
 
   const [ newTask, setNewTask ] = useState('');
+
+  useEffect(() => {
+    function getUser() {
+      // sem user, fazer nada
+      if (!user) {
+        return;
+      }
+
+      firebase.database().ref('tarefas').child(user).once('value', (snapshot) => {
+        // começar vazia
+        setTasks([]);
+
+        // percorrer e preencher lista
+        snapshot?.forEach((childItem) => {
+          let data = {
+            key: childItem.key,
+            nome: childItem.val().nome
+          }
+
+          setTasks(oldTask => [ ...oldTask, data ])
+        })
+      })
+    }
+
+    // chamar para ser executada
+    getUser();
+  }, [ user ])
 
   function handleDelete(key) {
     // console.log(key);
@@ -41,8 +68,8 @@ export default function App() {
           nome: newTask,
         };
 
-        // para pegar as tarefas que já foram adicionadas e acrescentar a nova / ordem inversa
-        setTasks(oldTask => [ ...oldTask, data ].reverse())
+        // para pegar as tarefas que já foram adicionadas e acrescentar a nova
+        setTasks(oldTask => [ ...oldTask, data ])
 
         Keyboard.dismiss();
         setNewTask('');
@@ -77,6 +104,8 @@ export default function App() {
             <FlatList
               data={ tasks }
               keyExtractor={ (item) => item.key }
+              contentContainerStyle={ { paddingBottom: 50 } }
+              showsVerticalScrollIndicator={ false }
               renderItem={ ({ item }) => (
                 <TaskList
                   data={ item }
