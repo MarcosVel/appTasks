@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, SafeAreaView, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import Login from './src/components/Login';
 import { FontAwesome } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
 import TaskList from './src/components/TaskList';
 
-let tasks = [
-  { key: '1', nome: 'Comprar uma puta' },
-  { key: '2', nome: 'Dar um carregador pra kenga' }
-]
+import firebase from './src/services/firebaseConnection';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
+  const [ tasks, setTasks ] = useState([]);
 
   const [ newTask, setNewTask ] = useState('');
 
@@ -22,6 +20,33 @@ export default function App() {
 
   function handleEdit(data) {
     console.log('Item clicado:', data)
+  }
+
+  function handleAdd() {
+    // Se vazio fazer nada
+    if (newTask === '') {
+      return;
+    }
+
+    // salvando tarefas no id do usuário
+    let tarefas = firebase.database().ref('tarefas').child(user);
+    let chave = tarefas.push().key;
+
+    tarefas.child(chave).set({
+      nome: newTask
+    })
+      .then(() => {
+        const data = {
+          key: chave,
+          nome: newTask,
+        };
+
+        // para pegar as tarefas que já foram adicionadas e acrescentar a nova / ordem inversa
+        setTasks(oldTask => [ ...oldTask, data ].reverse())
+
+        Keyboard.dismiss();
+        setNewTask('');
+      })
   }
 
   return (
@@ -44,7 +69,7 @@ export default function App() {
                 onChangeText={ (text) => setNewTask(text) }
               />
 
-              <TouchableOpacity style={ styles.buttonAdd }>
+              <TouchableOpacity style={ styles.buttonAdd } onPress={ handleAdd }>
                 <FontAwesome name="plus" size={ 20 } color="white" />
               </TouchableOpacity>
             </View>
