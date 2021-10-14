@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 45,
     padding: 10,
+    paddingHorizontal: 15,
     elevation: 3,
     fontSize: 17
   },

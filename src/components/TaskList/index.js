@@ -13,7 +13,7 @@ export default function TaskList({ data, deleteItem, editItem }) {
             style={ styles.buttonRemove }
             onPress={ () => deleteItem(data.key) }
           >
-            <Feather name="trash-2" size={ 24 } color="#f5f5f5" />
+            <Feather name="trash-2" size={ 24 } color="#fafafa" />
           </RectButton>
         </Animated.View>
       ) }
@@ -22,7 +22,7 @@ export default function TaskList({ data, deleteItem, editItem }) {
         style={ styles.container }
         onPress={ () => editItem(data) }
       >
-        <Text>{ data.nome }</Text>
+        <Text style={ { fontSize: 16 } }>{ data.nome }</Text>
       </RectButton>
     </Swipeable>
   )
@@ -31,7 +31,7 @@ export default function TaskList({ data, deleteItem, editItem }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // height: 40,
+    minHeight: 45,
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center',
@@ -43,14 +43,14 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonRemove: {
-    width: 35,
-    height: 35,
-    backgroundColor: '#ff0000',
+    width: 40,
+    height: '70%',
+    backgroundColor: '#f00000',
     marginTop: -9, // compensar o marginBottom do container
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    // right: 20,
+    // right: 5,
     // paddingLeft: 15
   }
 
