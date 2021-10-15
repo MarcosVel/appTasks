@@ -42,6 +42,9 @@ export default function Login({ changeStatus }) {
         <TextInput
           placeholder='Seu e-mail'
           style={ styles.input }
+          autoCorrect={ false }
+          autoCapitalize='none'
+          autoComplete='email'
           value={ email }
           onChangeText={ (email) => setEmail(email) }
         />
