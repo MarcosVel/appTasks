@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, SafeAreaView, TextInput, TouchableOpacity, Keyboard, FlatList } from 'react-native';
+import { Keyboard, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import Login from './src/components/Login';
-// import { FontAwesome, Ionicons } from '@expo/vector-icons';
-// import TaskList from './src/components/TaskList';
-import firebase from './src/services/firebaseConnection';
 import TaskView from './src/pages/TaskView';
+import firebase from './src/services/firebaseConnection';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -121,7 +119,7 @@ export default function App() {
           <Login changeStatus={ (user) => setUser(user) } />
           :
           // Task View
-          <TaskView novaTask={ newTask } inputRef={ inputRef } handleAdd={ handleAdd } key={ key } cancelEdit={ cancelEdit } tasks={ tasks } deleteItem={ handleDelete } editItem={ handleEdit } />
+          <TaskView novaTask={ newTask } setNewTask={ setNewTask } inputRef={ inputRef } handleAdd={ handleAdd } propKey={ key } cancelEdit={ cancelEdit } tasks={ tasks } deleteItem={ handleDelete } editItem={ handleEdit } />
       }
     </SafeAreaView>
   );

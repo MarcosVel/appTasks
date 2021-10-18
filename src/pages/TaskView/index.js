@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'r
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import TaskList from '../../components/TaskList';
 
-export default function TaskView({novaTask, inputRef, handleAdd, key, cancelEdit, tasks, deleteItem, editItem,}) {
+export default function TaskView({ setNewTask, novaTask, inputRef, handleAdd, propKey, cancelEdit, tasks, deleteItem, editItem, }) {
   return (
     <>
       <View style={ styles.containerTask }>
@@ -21,7 +21,7 @@ export default function TaskView({novaTask, inputRef, handleAdd, key, cancelEdit
       </View>
 
       {
-        key?.length > 0 && (
+        propKey?.length > 0 && (
           <View style={ styles.viewWarning }>
             <TouchableOpacity style={ styles.btnWarningCancel } onPress={ cancelEdit }>
               <Ionicons name="ios-close-circle-outline" size={ 24 } color="#ff0000" style={ { marginRight: 3 } } />
