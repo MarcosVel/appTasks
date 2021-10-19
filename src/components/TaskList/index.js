@@ -2,6 +2,7 @@ import React from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 import { Feather } from '@expo/vector-icons';
+import { COLORS } from '../../utils/colors';
 
 export default function TaskList({ data, deleteItem, editItem }) {
   return (
@@ -13,7 +14,7 @@ export default function TaskList({ data, deleteItem, editItem }) {
             style={ styles.buttonRemove }
             onPress={ () => deleteItem(data.key) }
           >
-            <Feather name="trash-2" size={ 24 } color="#fafafa" />
+            <Feather name="trash-2" size={ 24 } color={ COLORS.white } />
           </RectButton>
         </Animated.View>
       ) }
@@ -31,9 +32,9 @@ export default function TaskList({ data, deleteItem, editItem }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: 45,
+    minHeight: 50,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: `${ COLORS.white }`,
     alignItems: 'center',
     marginTop: 1,
     marginHorizontal: 2,
@@ -43,9 +44,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonRemove: {
-    width: 40,
+    width: 45,
     height: '70%',
-    backgroundColor: '#f00000',
+    backgroundColor: `${ COLORS.red }`,
     marginTop: -9, // compensar o marginBottom do container
     borderRadius: 8,
     justifyContent: 'center',

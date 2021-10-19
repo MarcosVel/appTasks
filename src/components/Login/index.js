@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import firebase from '../../services/firebaseConnection';
+import { COLORS } from '../../utils/colors';
 
 export default function Login({ changeStatus }) {
   const [ type, setType ] = useState('login');
@@ -57,7 +58,7 @@ export default function Login({ changeStatus }) {
         />
 
         <TouchableOpacity
-          style={ [ styles.btnLogin, { backgroundColor: type === 'login' ? '#3ea6f2' : '#141414' } ] }
+          style={ [ styles.btnLogin, { backgroundColor: type === 'login' ? `${ COLORS.blue }` : `${ COLORS.black }` } ] }
           onPress={ handleLogin }
         >
           <Text style={ styles.loginText }>
@@ -85,24 +86,25 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
-    backgroundColor: '#fff',
+    backgroundColor: `${ COLORS.white }`,
     borderRadius: 8,
-    height: 45,
+    height: 50,
     width: '90%',
     padding: 10,
+    paddingHorizontal: 15,
     elevation: 1,
     fontSize: 17
   },
   btnLogin: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 45,
+    height: 50,
     width: '90%',
     borderRadius: 8,
-    marginBottom: 10
+    marginBottom: 20,
   },
   loginText: {
     fontSize: 17,
-    color: '#fff',
+    color: `${ COLORS.white }`,
   }
 })
