@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import Login from './src/components/Login';
 import TaskView from './src/pages/TaskView';
@@ -10,8 +10,6 @@ export default function App() {
 
   const [ newTask, setNewTask ] = useState('');
   const [ key, setKey ] = useState('');
-
-  const inputRef = useRef(null);
 
   useEffect(() => {
     function getUser() {
@@ -119,7 +117,7 @@ export default function App() {
           <Login changeStatus={ (user) => setUser(user) } />
           :
           // Task View
-          <TaskView novaTask={ newTask } setNewTask={ setNewTask } inputRef={ inputRef } handleAdd={ handleAdd } propKey={ key } cancelEdit={ cancelEdit } tasks={ tasks } deleteItem={ handleDelete } editItem={ handleEdit } />
+          <TaskView novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } cancelEdit={ cancelEdit } tasks={ tasks } deleteItem={ handleDelete } />
       }
     </SafeAreaView>
   );
