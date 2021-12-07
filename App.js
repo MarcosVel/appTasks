@@ -47,15 +47,6 @@ export default function App() {
       })
   }
 
-  function handleEdit(data) {
-    // console.log('Item clicado:', data)
-    setKey(data.key);
-    // coloca no input o dado do card
-    setNewTask(data.nome);
-    inputRef.current.focus(); // abrir teclado
-
-  }
-
   function handleAdd() {
     // Se vazio fazer nada
     if (newTask === '') {
