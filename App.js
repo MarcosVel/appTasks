@@ -38,15 +38,6 @@ export default function App() {
     getUser();
   }, [ user ])
 
-  function handleDelete(key) {
-    // console.log(key);
-    firebase.database().ref('tarefas').child(user).child(key).remove()
-      .then(() => {
-        const findTasks = tasks.filter(item => item.key !== key) // percorre toda lista e retorna os que não tem o id selecionado
-        setTasks(findTasks);
-      })
-  }
-
   function handleAdd() {
     // Se vazio fazer nada
     if (newTask === '') {
@@ -102,7 +93,7 @@ export default function App() {
           <Login changeStatus={ (user) => setUser(user) } />
           :
           // Task View
-          <TaskView novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } tasks={ tasks } deleteItem={ handleDelete } />
+          <TaskView user={ user } novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } tasks={ tasks } setTasks={ setTasks } />
       }
     </SafeAreaView>
   );

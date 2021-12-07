@@ -1,12 +1,22 @@
-import React, { useRef, useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Keyboard } from 'react-native'
+import React, { useRef } from 'react';
+import { FlatList, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import TaskList from '../../components/TaskList';
 import { COLORS } from '../../utils/colors';
+import firebase from '../..//services/firebaseConnection';
 
-export default function TaskView({ setNewTask, novaTask, handleAdd, propKey, setPropKey, tasks, deleteItem }) {
+export default function TaskView({ user, setNewTask, novaTask, handleAdd, propKey, setPropKey, tasks, setTasks }) {
   const inputRef = useRef(null);
   
+  function handleDelete(key) {
+    // console.log(key);
+    firebase.database().ref('tarefas').child(user).child(key).remove()
+      .then(() => {
+        const findTasks = tasks.filter(item => item.key !== key) // percorre toda lista e retorna os que não tem o id selecionado
+        setTasks(findTasks);
+      })
+  }
+
   function handleEdit(data) {
     // console.log('Item clicado:', data)
     setPropKey(data.key);
@@ -60,7 +70,7 @@ export default function TaskView({ setNewTask, novaTask, handleAdd, propKey, set
           renderItem={ ({ item }) => (
             <TaskList
               data={ item }
-              deleteItem={ deleteItem }
+              deleteItem={ handleDelete }
               editItem={ handleEdit }
             />
           ) }
