@@ -1,10 +1,36 @@
-import React from 'react'
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
+import React, { useRef } from 'react';
+import { FlatList, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import TaskList from '../../components/TaskList';
 import { COLORS } from '../../utils/colors';
+import firebase from '../..//services/firebaseConnection';
 
-export default function TaskView({ setNewTask, novaTask, inputRef, handleAdd, propKey, cancelEdit, tasks, deleteItem, editItem, }) {
+export default function TaskView({ user, setNewTask, novaTask, handleAdd, propKey, setPropKey, tasks, setTasks }) {
+  const inputRef = useRef(null);
+  
+  function handleDelete(key) {
+    // console.log(key);
+    firebase.database().ref('tarefas').child(user).child(key).remove()
+      .then(() => {
+        const findTasks = tasks.filter(item => item.key !== key) // percorre toda lista e retorna os que não tem o id selecionado
+        setTasks(findTasks);
+      })
+  }
+
+  function handleEdit(data) {
+    // console.log('Item clicado:', data)
+    setPropKey(data.key);
+    // coloca no input o dado do card
+    setNewTask(data.nome);
+    inputRef.current.focus(); // abrir teclado
+  }
+
+  function cancelEdit() {
+    setPropKey('');
+    setNewTask('');
+    Keyboard.dismiss();
+  }
+  
   return (
     <>
       <View style={ styles.containerTask }>
@@ -44,8 +70,8 @@ export default function TaskView({ setNewTask, novaTask, inputRef, handleAdd, pr
           renderItem={ ({ item }) => (
             <TaskList
               data={ item }
-              deleteItem={ deleteItem }
-              editItem={ editItem }
+              deleteItem={ handleDelete }
+              editItem={ handleEdit }
             />
           ) }
         />

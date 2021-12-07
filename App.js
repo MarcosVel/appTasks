@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import Login from './src/components/Login';
 import TaskView from './src/pages/TaskView';
@@ -10,8 +10,6 @@ export default function App() {
 
   const [ newTask, setNewTask ] = useState('');
   const [ key, setKey ] = useState('');
-
-  const inputRef = useRef(null);
 
   useEffect(() => {
     function getUser() {
@@ -39,24 +37,6 @@ export default function App() {
     // chamar para ser executada
     getUser();
   }, [ user ])
-
-  function handleDelete(key) {
-    // console.log(key);
-    firebase.database().ref('tarefas').child(user).child(key).remove()
-      .then(() => {
-        const findTasks = tasks.filter(item => item.key !== key) // percorre toda lista e retorna os que não tem o id selecionado
-        setTasks(findTasks);
-      })
-  }
-
-  function handleEdit(data) {
-    // console.log('Item clicado:', data)
-    setKey(data.key);
-    // coloca no input o dado do card
-    setNewTask(data.nome);
-    inputRef.current.focus(); // abrir teclado
-
-  }
 
   function handleAdd() {
     // Se vazio fazer nada
@@ -104,12 +84,6 @@ export default function App() {
       })
   }
 
-  function cancelEdit() {
-    setKey('');
-    setNewTask('');
-    Keyboard.dismiss();
-  }
-
   return (
     <SafeAreaView style={ styles.container }>
       <StatusBar backgroundColor="transparent" barStyle='dark-content' />
@@ -119,7 +93,7 @@ export default function App() {
           <Login changeStatus={ (user) => setUser(user) } />
           :
           // Task View
-          <TaskView novaTask={ newTask } setNewTask={ setNewTask } inputRef={ inputRef } handleAdd={ handleAdd } propKey={ key } cancelEdit={ cancelEdit } tasks={ tasks } deleteItem={ handleDelete } editItem={ handleEdit } />
+          <TaskView user={ user } novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } tasks={ tasks } setTasks={ setTasks } />
       }
     </SafeAreaView>
   );
