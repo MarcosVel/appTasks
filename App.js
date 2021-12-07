@@ -93,12 +93,6 @@ export default function App() {
       })
   }
 
-  function cancelEdit() {
-    setKey('');
-    setNewTask('');
-    Keyboard.dismiss();
-  }
-
   return (
     <SafeAreaView style={ styles.container }>
       <StatusBar backgroundColor="transparent" barStyle='dark-content' />
@@ -108,7 +102,7 @@ export default function App() {
           <Login changeStatus={ (user) => setUser(user) } />
           :
           // Task View
-          <TaskView novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } cancelEdit={ cancelEdit } tasks={ tasks } deleteItem={ handleDelete } />
+          <TaskView novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } tasks={ tasks } deleteItem={ handleDelete } />
       }
     </SafeAreaView>
   );

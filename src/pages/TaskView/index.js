@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Keyboard } from 'react-native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import TaskList from '../../components/TaskList';
 import { COLORS } from '../../utils/colors';
 
-export default function TaskView({ setNewTask, novaTask, handleAdd, propKey, setPropKey, cancelEdit, tasks, deleteItem }) {
+export default function TaskView({ setNewTask, novaTask, handleAdd, propKey, setPropKey, tasks, deleteItem }) {
   const inputRef = useRef(null);
   
   function handleEdit(data) {
@@ -13,6 +13,12 @@ export default function TaskView({ setNewTask, novaTask, handleAdd, propKey, set
     // coloca no input o dado do card
     setNewTask(data.nome);
     inputRef.current.focus(); // abrir teclado
+  }
+
+  function cancelEdit() {
+    setPropKey('');
+    setNewTask('');
+    Keyboard.dismiss();
   }
   
   return (
