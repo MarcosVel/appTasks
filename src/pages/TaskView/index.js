@@ -1,13 +1,60 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { FlatList, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import TaskList from '../../components/TaskList';
 import { COLORS } from '../../utils/colors';
 import firebase from '../..//services/firebaseConnection';
 
-export default function TaskView({ user, setNewTask, novaTask, handleAdd, propKey, setPropKey, tasks, setTasks }) {
+export default function TaskView({ user, propKey, setPropKey, tasks, setTasks }) {
   const inputRef = useRef(null);
+  const [ newTask, setNewTask ] = useState('');
   
+  function handleAdd() {
+    // Se vazio fazer nada
+    if (newTask === '') {
+      return;
+    }
+
+    // usuário quer editar uma tarefa
+    if (propKey !== '') {
+      firebase.database().ref('tarefas').child(user).child(propKey).update({
+        nome: newTask // novo valor passado no input de edição
+      })
+        .then(() => {
+          const taskIndex = tasks.findIndex(item => item.key === propKey) // procura o index da task selecionada
+          let taskClone = tasks; // clona toda a lista
+          taskClone[ taskIndex ].nome = newTask // passa para a task selecionada o valor que está no input
+
+          setTasks([ ...taskClone ]) // faz com que a lista seja atualizada com o novo valor da task
+        })
+
+      Keyboard.dismiss();
+      setNewTask('');
+      setPropKey('');
+      return;
+    }
+
+    // salvando tarefas no id do usuário
+    let tarefas = firebase.database().ref('tarefas').child(user);
+    let chave = tarefas.push().key;
+
+    tarefas.child(chave).set({
+      nome: newTask
+    })
+      .then(() => {
+        const data = {
+          key: chave,
+          nome: newTask,
+        };
+
+        // para pegar as tarefas que já foram adicionadas e acrescentar a nova
+        setTasks(oldTask => [ ...oldTask, data ])
+
+        Keyboard.dismiss();
+        setNewTask('');
+      })
+  }
+
   function handleDelete(key) {
     // console.log(key);
     firebase.database().ref('tarefas').child(user).child(key).remove()
@@ -37,7 +84,7 @@ export default function TaskView({ user, setNewTask, novaTask, handleAdd, propKe
         <TextInput
           style={ styles.input }
           placeholder="Tarefa..."
-          value={ novaTask }
+          value={ newTask }
           onChangeText={ (text) => setNewTask(text) }
           ref={ inputRef }
         />

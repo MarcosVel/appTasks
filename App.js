@@ -8,7 +8,6 @@ export default function App() {
   const [ user, setUser ] = useState(null);
   const [ tasks, setTasks ] = useState([]);
 
-  const [ newTask, setNewTask ] = useState('');
   const [ key, setKey ] = useState('');
 
   useEffect(() => {
@@ -38,52 +37,6 @@ export default function App() {
     getUser();
   }, [ user ])
 
-  function handleAdd() {
-    // Se vazio fazer nada
-    if (newTask === '') {
-      return;
-    }
-
-    // usuário quer editar uma tarefa
-    if (key !== '') {
-      firebase.database().ref('tarefas').child(user).child(key).update({
-        nome: newTask // novo valor passado no input de edição
-      })
-        .then(() => {
-          const taskIndex = tasks.findIndex(item => item.key === key) // procura o index da task selecionada
-          let taskClone = tasks; // clona toda a lista
-          taskClone[ taskIndex ].nome = newTask // passa para a task selecionada o valor que está no input
-
-          setTasks([ ...taskClone ]) // faz com que a lista seja atualizada com o novo valor da task
-        })
-
-      Keyboard.dismiss();
-      setNewTask('');
-      setKey('');
-      return;
-    }
-
-    // salvando tarefas no id do usuário
-    let tarefas = firebase.database().ref('tarefas').child(user);
-    let chave = tarefas.push().key;
-
-    tarefas.child(chave).set({
-      nome: newTask
-    })
-      .then(() => {
-        const data = {
-          key: chave,
-          nome: newTask,
-        };
-
-        // para pegar as tarefas que já foram adicionadas e acrescentar a nova
-        setTasks(oldTask => [ ...oldTask, data ])
-
-        Keyboard.dismiss();
-        setNewTask('');
-      })
-  }
-
   return (
     <SafeAreaView style={ styles.container }>
       <StatusBar backgroundColor="transparent" barStyle='dark-content' />
@@ -92,8 +45,7 @@ export default function App() {
           // Create/Login view
           <Login changeStatus={ (user) => setUser(user) } />
           :
-          // Task View
-          <TaskView user={ user } novaTask={ newTask } setNewTask={ setNewTask } handleAdd={ handleAdd } propKey={ key } setPropKey={ setKey } tasks={ tasks } setTasks={ setTasks } />
+          <TaskView user={ user } propKey={ key } setPropKey={ setKey } tasks={ tasks } setTasks={ setTasks } />
       }
     </SafeAreaView>
   );
